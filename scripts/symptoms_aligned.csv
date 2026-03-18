@@ -1,0 +1,67 @@
+class_name,symptom_text,symptom_text_clean
+Apple_Apple_Scab,Olive to dark-brown scab lesions on leaf surface causing distortion and early drop.,olive to dark brown scab lesions on leaf surface causing distortion and early drop
+Apple_Black_Rot,Purple to dark brown circular leaf spots with concentric rings; tiny black pycnidia in centers.,purple to dark brown circular leaf spots with concentric rings tiny black pycnidia in centers
+Apple_Cedar_Apple_Rust,Bright orange or yellow raised spots with red margins; gelatinous growth on underside.,bright orange or yellow raised spots with red margins gelatinous growth on underside
+Apple_Healthy,"Leaf shows uniform green color, smooth surface, no spots, lesions, or chlorosis.",leaf shows uniform green color smooth surface no spots lesions or chlorosis
+Apple_Leaf,Apple leaf showing mottling or scattered spots indicating stress or disease.,apple leaf showing mottling or scattered spots indicating stress or disease
+Apple_Rust_Leaf,Orange rust pustules on underside with yellow-orange spots on upper surface.,orange rust pustules on underside with yellow orange spots on upper surface
+Apple_Scab,Olive-green to brown velvety spots with yellow halos that enlarge and cause leaf drop.,olive green to brown velvety spots with yellow halos that enlarge and cause leaf drop
+Bell_Pepper_Leaf,Pepper leaf with mottling and minor necrotic flecks indicating early disease.,pepper leaf with mottling and minor necrotic flecks indicating early disease
+Bell_Pepper_Leaf_Spot,Small dark water-soaked spots that turn brown with yellow halos on pepper leaves.,small dark water soaked spots that turn brown with yellow halos on pepper leaves
+Blueberry_Healthy,Glossy green leaf with even coloration and no necrotic or chlorotic areas.,glossy green leaf with even coloration and no necrotic or chlorotic areas
+Blueberry_Leaf,Reddish-brown leaf spots and marginal blight leading to premature reddening.,reddish brown leaf spots and marginal blight leading to premature reddening
+Cherry_Including_Sour_Healthy,Firm green cherry leaf with intact margins and no spots or discoloration.,firm green cherry leaf with intact margins and no spots or discoloration
+Cherry_Including_Sour_Powdery_Mildew,"White powdery fungal growth on upper surface, causes leaf curl and pale blotches.",white powdery fungal growth on upper surface causes leaf curl and pale blotches
+Cherry_Leaf,Purple to brown circular spots that may drop out forming shot holes.,purple to brown circular spots that may drop out forming shot holes
+Corn_Gray_Leaf_Spot,Narrow rectangular gray lesions parallel to veins; leaf tissue becomes necrotic.,narrow rectangular gray lesions parallel to veins leaf tissue becomes necrotic
+Corn_Leaf_Blight,Large elongated tan lesions with chlorotic borders leading to leaf blight.,large elongated tan lesions with chlorotic borders leading to leaf blight
+Corn_Maize_Cercospora_Leaf_Spot_Gray_Leaf_Spot,Rectangular gray to tan lesions bounded by veins; lesions coalesce into blighted areas.,rectangular gray to tan lesions bounded by veins lesions coalesce into blighted areas
+Corn_Maize_Common_Rust_,Orange to reddish-brown powdery pustules scattered on both leaf surfaces.,orange to reddish brown powdery pustules scattered on both leaf surfaces
+Corn_Maize_Healthy,"Vibrant green maize leaf with parallel veins, no lesions or streaking.",vibrant green maize leaf with parallel veins no lesions or streaking
+Corn_Maize_Northern_Leaf_Blight,Long cigar-shaped gray-green lesions that turn tan and may merge between veins.,long cigar shaped gray green lesions that turn tan and may merge between veins
+Corn_Rust_Leaf,"Rust-colored pustules erupting through epidermis, often with yellow halos.",rust colored pustules erupting through epidermis often with yellow halos
+Grape_Black_Rot,Brown circular lesions with black fruiting bodies; concentric dark rings on leaves.,brown circular lesions with black fruiting bodies concentric dark rings on leaves
+Grape_Black_Rot,Small tan spots with dark margins and black fruiting bodies radiating outward.,small tan spots with dark margins and black fruiting bodies radiating outward
+Grape_Esca_Black_Measles,Interveinal chlorosis with tiger-striping and brown ?measles? spots; necrotic margins.,interveinal chlorosis with tiger striping and brown measles spots necrotic margins
+Grape_Healthy,Evenly green grape leaf with clear venation and no spotting or burn.,evenly green grape leaf with clear venation and no spotting or burn
+Grape_Leaf,Discolored spots or mildew patches appearing on grape leaf blade.,discolored spots or mildew patches appearing on grape leaf blade
+Grape_Leaf_Blight_Isariopsis_Leaf_Spot,Angular brown to purple spots bounded by veins; gray sporulation on underside.,angular brown to purple spots bounded by veins gray sporulation on underside
+Orange_Haunglongbing_Citrus_Greening,Blotchy mottling and asymmetric yellowing; small lopsided fruit often accompanies.,blotchy mottling and asymmetric yellowing small lopsided fruit often accompanies
+Peach_Bacterial_Spot,Small dark angular lesions with yellow halos; shot-holing as tissue drops out.,small dark angular lesions with yellow halos shot holing as tissue drops out
+Peach_Healthy,Healthy peach leaf with bright green color and no puckering or lesions.,healthy peach leaf with bright green color and no puckering or lesions
+Peach_Leaf,Reddish puckered areas that curl and thicken before turning brown.,reddish puckered areas that curl and thicken before turning brown
+Pepper_Bell_Bacterial_Spot,Dark greasy lesions with yellow margins; spots may coalesce causing tearing.,dark greasy lesions with yellow margins spots may coalesce causing tearing
+Pepper_Bell_Healthy,Pepper leaf exhibiting general spotting or chlorosis indicative of disease stress.,pepper leaf exhibiting general spotting or chlorosis indicative of disease stress
+Potato_Early_Blight,"Brown concentric ring lesions with yellow halos, starting on lower leaves.",brown concentric ring lesions with yellow halos starting on lower leaves
+Potato_Early_Blight,Small brown target-like spots with chlorotic margins on potato leaves.,small brown target like spots with chlorotic margins on potato leaves
+Potato_Healthy,Even green potato leaflet with intact margins and no spotting or water-soaking.,even green potato leaflet with intact margins and no spotting or water soaking
+Potato_Late_Blight,Dark water-soaked patches expanding rapidly with white mold on undersides.,dark water soaked patches expanding rapidly with white mold on undersides
+Potato_Late_Blight,Irregular water-soaked lesions that become brown and oily with white sporulation beneath.,irregular water soaked lesions that become brown and oily with white sporulation beneath
+Raspberry_Healthy,Uniformly green raspberry leaf with crisp serrated edges and no blemishes.,uniformly green raspberry leaf with crisp serrated edges and no blemishes
+Raspberry_Leaf,"Purple-brown spots that may coalesce, causing leaf yellowing and drop.",purple brown spots that may coalesce causing leaf yellowing and drop
+Soyabean_Leaf,Angular brown lesions between veins with surrounding yellow chlorosis.,angular brown lesions between veins with surrounding yellow chlorosis
+Soybean_Healthy,"Soybean leaflet is uniformly green, smooth, without necrosis or mottling.",soybean leaflet is uniformly green smooth without necrosis or mottling
+Squash_Powdery_Mildew,White powdery fungal growth on upper surface leading to yellowing.,white powdery fungal growth on upper surface leading to yellowing
+Squash_Powdery_Mildew_Leaf,White talcum-like patches on leaves and petioles causing premature senescence.,white talcum like patches on leaves and petioles causing premature senescence
+Strawberry_Healthy,Bright green strawberry leaflet with glossy surface and no scorch or spots.,bright green strawberry leaflet with glossy surface and no scorch or spots
+Strawberry_Leaf,Irregular purple to brown spots that dry and form tan centers.,irregular purple to brown spots that dry and form tan centers
+Strawberry_Leaf_Scorch,"Irregular purple to brown margins progressing to dry, scorched edges between veins.",irregular purple to brown margins progressing to dry scorched edges between veins
+Tomato_Bacterial_Spot,Small dark water-soaked spots with yellow halos and raised lesion texture.,small dark water soaked spots with yellow halos and raised lesion texture
+Tomato_Bacterial_Spot,Tiny water-soaked lesions that enlarge to brown spots with yellow margins.,tiny water soaked lesions that enlarge to brown spots with yellow margins
+Tomato_Early_Blight,Target-like concentric brown rings surrounded by yellow tissue on leaves.,target like concentric brown rings surrounded by yellow tissue on leaves
+Tomato_Early_Blight,"Brown concentric ring lesions with yellow halos, starting on older leaves.",brown concentric ring lesions with yellow halos starting on older leaves
+Tomato_Healthy,"Uniform medium-green tomato leaf with no lesions, curling, or mosaic patterns.",uniform medium green tomato leaf with no lesions curling or mosaic patterns
+Tomato_Late_Blight,Dark irregular lesions with white fungal growth on the underside and rapid tissue death.,dark irregular lesions with white fungal growth on the underside and rapid tissue death
+Tomato_Late_Blight,Water-soaked dark blotches that expand rapidly with white fuzz underneath in humidity.,water soaked dark blotches that expand rapidly with white fuzz underneath in humidity
+Tomato_Leaf,Tomato leaf showing non-specific mottling minor spots or edge necrosis.,tomato leaf showing non specific mottling minor spots or edge necrosis
+Tomato_Leaf_Mold,Yellow patches on upper surface with olive-green velvety mold beneath.,yellow patches on upper surface with olive green velvety mold beneath
+Tomato_Leaf_Mold,Olive velvety mold on underside with pale-yellow spots on top surface.,olive velvety mold on underside with pale yellow spots on top surface
+Tomato_Leaf_Mosaic_Virus,Mottled light dark green mosaic with distorted shoestring leaves.,mottled light dark green mosaic with distorted shoestring leaves
+Tomato_Leaf_Yellow_Virus,Bright yellowing between veins and curling associated with viral infection.,bright yellowing between veins and curling associated with viral infection
+Tomato_Septoria,Numerous small gray spots with dark borders and tiny black fruiting bodies.,numerous small gray spots with dark borders and tiny black fruiting bodies
+Tomato_Septoria,Small circular gray spots with dark brown borders and black pycnidia in center.,small circular gray spots with dark brown borders and black pycnidia in center
+Tomato_Spider_Mites_Twospotted_Spider_Mite,Fine yellow stippling bronzing and webbing from mite feeding on undersides.,fine yellow stippling bronzing and webbing from mite feeding on undersides
+Tomato_Target_Spot,Round brown lesions with light centers and concentric rings; yellow halos around spots.,round brown lesions with light centers and concentric rings yellow halos around spots
+Tomato_Tomato_Mosaic_Virus,Light and dark green mosaic patterns leaf distortion and mottling.,light and dark green mosaic patterns leaf distortion and mottling
+Tomato_Tomato_Yellow_Leaf_Curl_Virus,Severe upward curling yellowing and stunted shoots with thickened veins.,severe upward curling yellowing and stunted shoots with thickened veins
+Tomato_Two_Spotted_Spider_Mites_Leaf,Fine yellow stippling and bronzing with webbing on underside from mite feeding.,fine yellow stippling and bronzing with webbing on underside from mite feeding

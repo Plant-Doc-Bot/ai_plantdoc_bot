@@ -1,0 +1,30 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data folders kept in Drive (not tracked in git)
+data/
+data_cleaned/
+PlantVillage/
+unused_data/
+val/
+models/
+
+# Logs & runs
+logs/
+*.log
+runs/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
