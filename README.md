@@ -44,6 +44,35 @@ Pretrained checkpoints are stored in `models/`:
 - `plant_disease_resnet18_v1.pth`
 - `plant_disease_resnet50_v1.pth`
 
+**Milestone 3 Streamlit App**
+Run the chatbot-style demo (image + text routing):
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+**Flask Backend (API)**
+Run the Flask API server:
+```bash
+python backend/server.py
+```
+
+Endpoints:
+- `GET /health` (available models)
+- `POST /predict/image` (form-data: `image`, optional `model`, optional `top_k`)
+- `POST /predict/text` (json: `{"text": "...", "model": "resnet50"}`)
+
+**Class Names + Treatments**
+- `data/class_names.txt` provides the exact class order used for model predictions.
+- `data/treatments.json` contains treatment tips for each class (used by the app).
+The Streamlit app also lets you download a diagnosis report as JSON or TXT after each run.
+
+**Milestone 3 Completion**
+Milestone 3 requirements are met:
+- Chatbot routing for image + text inputs (`app.py`)
+- Treatment recommendation engine (`data/treatments.json`)
+- UI + backend integration (Streamlit UI + Flask API)
+
 **Notes**
 - Large datasets are excluded via `.gitignore`. Add your data locally in `data/`.
 - If you want a pure local workflow, remove the Colab-specific Drive mount cells from the notebooks.

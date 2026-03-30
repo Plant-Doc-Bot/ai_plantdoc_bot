@@ -1,0 +1,381 @@
+{
+  "default": {
+    "immediate": [
+      "Remove infected tissue and monitor closely."
+    ],
+    "prevention": [
+      "Improve airflow and avoid overhead watering."
+    ],
+    "notes": [
+      "Use crop-appropriate treatments if symptoms spread."
+    ]
+  },
+  "healthy": {
+    "immediate": [
+      "No treatment needed. Continue regular watering and monitoring."
+    ],
+    "prevention": [
+      "Keep leaves dry when possible and remove debris to prevent future disease.",
+      "Use clean tools and avoid working in wet foliage."
+    ],
+    "notes": [
+      "Maintain balanced fertilization to keep plants resilient."
+    ]
+  },
+  "by_label": {
+    "Apple___Apple_scab": {
+      "immediate": [
+        "Remove fallen leaves and fruit to reduce inoculum.",
+        "Prune for good airflow through the canopy."
+      ],
+      "prevention": [
+        "Use resistant varieties where possible.",
+        "Apply a labeled fungicide early in the season if needed."
+      ],
+      "notes": [
+        "Scab symptoms often appear as olive or dark lesions."
+      ]
+    },
+    "Apple___Cedar_apple_rust": {
+      "immediate": [
+        "Remove heavily infected leaves and prune for airflow.",
+        "If feasible, remove galls on nearby junipers to reduce spread."
+      ],
+      "prevention": [
+        "Apply a labeled fungicide at bud break and during wet periods.",
+        "Choose resistant apple varieties where possible."
+      ],
+      "notes": [
+        "Rust needs both apple and juniper hosts to complete its cycle."
+      ]
+    },
+    "Apple___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Blueberry___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Cherry_(including_sour)___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+      "immediate": [
+        "Remove infected leaves and avoid splashing water.",
+        "Keep foliage dry to slow lesion expansion."
+      ],
+      "prevention": [
+        "Mulch to reduce soil splash and rotate crops annually.",
+        "Use a labeled fungicide or bactericide as appropriate."
+      ],
+      "notes": [
+        "Leaf spots can be fungal or bacterial; monitor closely."
+      ]
+    },
+    "Corn_(maize)___Common_rust_": {
+      "immediate": [
+        "Remove heavily infected leaves and prune for airflow.",
+        "Dispose of infected debris away from the crop."
+      ],
+      "prevention": [
+        "Avoid overhead irrigation and reduce leaf wetness duration.",
+        "Apply a labeled fungicide if rust persists."
+      ],
+      "notes": [
+        "Rust pustules often appear orange or brown on leaf undersides."
+      ]
+    },
+    "Corn_(maize)___Northern_Leaf_Blight": {
+      "immediate": [
+        "Remove infected leaves and discard away from the field.",
+        "Avoid overhead irrigation and improve air circulation."
+      ],
+      "prevention": [
+        "Rotate crops and avoid planting in infected soil.",
+        "Apply a labeled fungicide preventively in high-risk periods."
+      ],
+      "notes": [
+        "Late blight can spread rapidly under cool, wet conditions."
+      ]
+    },
+    "Grape___Black_rot": {
+      "immediate": [
+        "Remove mummified fruit and infected canes.",
+        "Prune to improve airflow and reduce humidity in the canopy."
+      ],
+      "prevention": [
+        "Sanitize pruning tools between cuts.",
+        "Apply a labeled fungicide at early fruit set if pressure is high."
+      ],
+      "notes": [
+        "Black rot often worsens after warm, wet weather."
+      ]
+    },
+    "Grape___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Peach___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Pepper,_bell___Bacterial_spot": {
+      "immediate": [
+        "Remove infected leaves and avoid handling wet plants.",
+        "Avoid overhead watering to reduce splash spread."
+      ],
+      "prevention": [
+        "Use clean seed and resistant varieties if available.",
+        "Copper-based bactericides may help when used preventively."
+      ],
+      "notes": [
+        "Bacterial spot spreads quickly in warm, wet conditions."
+      ]
+    },
+    "Pepper,_bell___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Potato___Early_blight": {
+      "immediate": [
+        "Remove infected leaves and discard away from the field.",
+        "Avoid overhead irrigation and improve air circulation."
+      ],
+      "prevention": [
+        "Rotate crops and avoid planting in infected soil.",
+        "Apply a labeled fungicide preventively in high-risk periods."
+      ],
+      "notes": [
+        "Late blight can spread rapidly under cool, wet conditions."
+      ]
+    },
+    "Potato___Late_blight": {
+      "immediate": [
+        "Remove infected leaves and discard away from the field.",
+        "Avoid overhead irrigation and improve air circulation."
+      ],
+      "prevention": [
+        "Rotate crops and avoid planting in infected soil.",
+        "Apply a labeled fungicide preventively in high-risk periods."
+      ],
+      "notes": [
+        "Late blight can spread rapidly under cool, wet conditions."
+      ]
+    },
+    "Raspberry___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Soybean___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Squash___Powdery_mildew": {
+      "immediate": [
+        "Remove heavily infected leaves and improve airflow.",
+        "Apply sulfur or potassium bicarbonate products if needed."
+      ],
+      "prevention": [
+        "Avoid overcrowding and water at the base of plants.",
+        "Choose resistant varieties when possible."
+      ],
+      "notes": [
+        "Powdery mildew appears as a white powdery coating."
+      ]
+    },
+    "Strawberry___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Tomato___Bacterial_spot": {
+      "immediate": [
+        "Remove infected leaves and avoid handling wet plants.",
+        "Avoid overhead watering to reduce splash spread."
+      ],
+      "prevention": [
+        "Use clean seed and resistant varieties if available.",
+        "Copper-based bactericides may help when used preventively."
+      ],
+      "notes": [
+        "Bacterial spot spreads quickly in warm, wet conditions."
+      ]
+    },
+    "Tomato___Early_blight": {
+      "immediate": [
+        "Remove infected leaves and discard away from the field.",
+        "Avoid overhead irrigation and improve air circulation."
+      ],
+      "prevention": [
+        "Rotate crops and avoid planting in infected soil.",
+        "Apply a labeled fungicide preventively in high-risk periods."
+      ],
+      "notes": [
+        "Late blight can spread rapidly under cool, wet conditions."
+      ]
+    },
+    "Tomato___Late_blight": {
+      "immediate": [
+        "Remove infected leaves and discard away from the field.",
+        "Avoid overhead irrigation and improve air circulation."
+      ],
+      "prevention": [
+        "Rotate crops and avoid planting in infected soil.",
+        "Apply a labeled fungicide preventively in high-risk periods."
+      ],
+      "notes": [
+        "Late blight can spread rapidly under cool, wet conditions."
+      ]
+    },
+    "Tomato___Leaf_Mold": {
+      "immediate": [
+        "Increase ventilation and reduce leaf wetness.",
+        "Remove severely infected leaves."
+      ],
+      "prevention": [
+        "Avoid high humidity in enclosed spaces.",
+        "Use resistant varieties where available."
+      ],
+      "notes": [
+        "Leaf mold thrives in cool, humid environments."
+      ]
+    },
+    "Tomato___Septoria_leaf_spot": {
+      "immediate": [
+        "Remove lower infected leaves to slow spread.",
+        "Mulch to reduce soil splash onto foliage."
+      ],
+      "prevention": [
+        "Avoid overhead watering and provide good spacing.",
+        "Use a labeled fungicide if symptoms continue."
+      ],
+      "notes": [
+        "Septoria often starts on lower leaves first."
+      ]
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+      "immediate": [
+        "Remove infected plants early to limit spread.",
+        "Control whiteflies using traps or labeled treatments."
+      ],
+      "prevention": [
+        "Use reflective mulch to deter whiteflies.",
+        "Install insect netting in high-pressure areas."
+      ],
+      "notes": [
+        "Symptoms include upward leaf curl and yellowing."
+      ]
+    },
+    "Tomato___Tomato_mosaic_virus": {
+      "immediate": [
+        "Remove infected plants to prevent spread.",
+        "Disinfect tools and hands after handling affected plants."
+      ],
+      "prevention": [
+        "Control insect vectors and avoid tobacco exposure around tomatoes.",
+        "Use certified virus-free seed or transplants."
+      ],
+      "notes": [
+        "Viruses cannot be cured; management focuses on prevention."
+      ]
+    },
+    "Tomato___healthy": {
+      "immediate": [
+        "No treatment needed. Continue regular watering and monitoring."
+      ],
+      "prevention": [
+        "Keep leaves dry when possible and remove debris to prevent future disease.",
+        "Use clean tools and avoid working in wet foliage."
+      ],
+      "notes": [
+        "Maintain balanced fertilization to keep plants resilient."
+      ]
+    },
+    "Tomato_two_spotted_spider_mites_leaf": {
+      "immediate": [
+        "Spray the undersides of leaves with water to dislodge mites.",
+        "Use insecticidal soap or horticultural oil as labeled."
+      ],
+      "prevention": [
+        "Reduce dust and water stress to discourage mite outbreaks.",
+        "Encourage beneficial predators when possible."
+      ],
+      "notes": [
+        "Check for fine webbing and stippling on leaves."
+      ]
+    }
+  }
+}
