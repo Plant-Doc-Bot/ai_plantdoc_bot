@@ -122,6 +122,106 @@ def _normalize_label(label: str):
     return label.replace("___", "_").replace("__", "_").replace("_", " ").strip()
 
 
+def _clean_label_text(text: str):
+    return text.replace("_", " ").strip()
+
+
+def _split_label(label: str):
+    if "___" in label:
+        crop, disease = label.split("___", 1)
+        return crop, disease
+    if "_" in label:
+        crop, disease = label.split("_", 1)
+        return crop, disease
+    return label, ""
+
+
+def pretty_label(label: str):
+    crop, disease = _split_label(label)
+    crop = _clean_label_text(crop)
+    disease = _clean_label_text(disease)
+    if disease:
+        return f"{crop} - {disease}"
+    return crop
+
+
+def confidence_band(score: float):
+    if score >= 0.75:
+        return "High"
+    if score >= 0.5:
+        return "Medium"
+    if score >= 0.25:
+        return "Low"
+    return "Very low"
+
+
+def confidence_bar(score: float, width: int = 10):
+    score = max(0.0, min(1.0, score))
+    filled = int(round(score * width))
+    filled = min(width, max(0, filled))
+    return "█" * filled + "░" * (width - filled)
+
+
+@st.cache_resource
+def load_label_map():
+    path = DATA_DIR / "label_map.json"
+    if path.exists():
+        data = _safe_read_json(path)
+        if isinstance(data, dict):
+            labels = data.get("labels")
+            if isinstance(labels, dict):
+                return labels
+    return {}
+
+
+def build_summary(label: str, tips):
+    label_l = label.lower()
+    if "healthy" in label_l:
+        return "No visible disease symptoms detected in the input."
+    if isinstance(tips, dict):
+        notes = tips.get("notes")
+        if isinstance(notes, list) and notes:
+            return notes[0]
+    return "Symptoms appear consistent with the predicted disease."
+
+
+def get_label_info(label: str, tips, label_map: dict):
+    info = label_map.get(label, {}) if isinstance(label_map, dict) else {}
+    crop_raw, disease_raw = _split_label(label)
+    crop = _clean_label_text(crop_raw)
+    disease = _clean_label_text(disease_raw)
+    if not disease and "healthy" in label.lower():
+        disease = "Healthy"
+    display_name = info.get("display_name") or pretty_label(label)
+    if display_name.lower().endswith(" - healthy"):
+        display_name = display_name[:-9] + "Healthy"
+    if disease.lower() == "healthy":
+        disease = "Healthy"
+    summary = info.get("summary") or build_summary(label, tips)
+    return {
+        "display_name": display_name,
+        "crop": info.get("crop") or crop,
+        "disease": info.get("disease") or disease or "Unknown",
+        "summary": summary,
+    }
+
+
+def follow_up_questions(score: float, input_type: str):
+    if score >= 0.5:
+        return []
+    if input_type == "image":
+        return [
+            "Can you upload a clearer, closer photo of the affected leaf?",
+            "Which crop is this plant?",
+            "Do you see spots, mold, or yellowing on the leaves?",
+        ]
+    return [
+        "Which crop is affected?",
+        "Are there spots, mold, or yellowing on the leaves?",
+        "Can you upload a leaf photo for a more accurate result?",
+    ]
+
+
 def _detect_crop(text: str, class_names):
     crops = sorted({name.split("_")[0].lower() for name in class_names})
     for crop in crops:
@@ -253,8 +353,9 @@ def recommend_treatment(label: str):
 
 
 def format_prediction(label: str, score: float):
-    pretty = _normalize_label(label)
-    return f"{pretty} (confidence {score * 100:.1f}%)"
+    pretty = pretty_label(label)
+    band = confidence_band(score)
+    return f"{pretty} (confidence {band}, {score * 100:.1f}%)"
 
 
 def format_treatment_lines(tips):
@@ -296,6 +397,17 @@ def build_report_text(report: dict):
         label = pred.get("label", "Unknown")
         score = pred.get("confidence", 0.0)
         lines.append(format_prediction(label, score))
+        band = report.get("confidence_band")
+        if band:
+            lines.append(f"Confidence band: {band}")
+        label_info = report.get("label_info") or {}
+        if label_info.get("crop"):
+            lines.append(f"Crop: {label_info.get('crop')}")
+        if label_info.get("disease") and label_info.get("disease") != "Unknown":
+            lines.append(f"Issue: {label_info.get('disease')}")
+        summary = report.get("summary")
+        if summary:
+            lines.append(f"Summary: {summary}")
 
     top_k = report.get("top_k", [])
     if top_k:
@@ -360,7 +472,7 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         if msg.get("type") == "image":
-            st.image(msg["content"], caption="Uploaded image", use_container_width=True)
+            st.image(msg["content"], caption="Uploaded image", width="stretch")
         else:
             st.write(msg["content"])
 
@@ -376,18 +488,37 @@ if image_file and selected_arch:
             preds = predict_image(model, class_names, image, top_k=top_k)
             primary_label, primary_score = preds[0]
             tips = recommend_treatment(primary_label)
+            label_map = load_label_map()
+            label_info = get_label_info(primary_label, tips, label_map)
+            summary = label_info.get("summary")
+            questions = follow_up_questions(primary_score, "image")
 
             response_lines = [
-                f"Model: {selected_arch} (classes from {source})",
-                "Prediction:",
-                format_prediction(primary_label, primary_score),
+                f"Likely diagnosis: {label_info.get('display_name')}",
+                f"Confidence: {confidence_band(primary_score)} ({primary_score * 100:.1f}%)",
+                f"Confidence bar: {confidence_bar(primary_score)}",
             ]
+            if label_info.get("crop"):
+                response_lines.append(f"Crop: {label_info.get('crop')}")
+            if label_info.get("disease") and label_info.get("disease") != "Unknown":
+                response_lines.append(f"Issue: {label_info.get('disease')}")
+            if summary:
+                response_lines.append(f"Summary: {summary}")
+            response_lines.extend(
+                [
+                    f"Model: {selected_arch} (classes from {source})",
+                    "Treatment guidance:",
+                ]
+            )
+            response_lines.extend(format_treatment_lines(tips))
             if len(preds) > 1:
                 response_lines.append("Other candidates:")
                 for label, score in preds[1:]:
                     response_lines.append(f"- {format_prediction(label, score)}")
-
-            response_lines.extend(format_treatment_lines(tips))
+            if questions:
+                response_lines.append("Follow-up questions:")
+                for question in questions:
+                    response_lines.append(f"- {question}")
 
             report = {
                 "timestamp": datetime.now().isoformat(timespec="seconds"),
@@ -397,6 +528,10 @@ if image_file and selected_arch:
                 "prediction": {"label": primary_label, "confidence": primary_score},
                 "top_k": [{"label": label, "confidence": score} for label, score in preds],
                 "treatment": tips,
+                "summary": summary,
+                "confidence_band": confidence_band(primary_score),
+                "follow_up_questions": questions,
+                "label_info": label_info,
             }
             st.session_state.last_report = report
 
@@ -425,12 +560,28 @@ if prompt:
 
     label, score = rule_based_text_diagnosis(prompt, class_names)
     tips = recommend_treatment(label)
+    label_map = load_label_map()
+    label_info = get_label_info(label, tips, label_map)
+    summary = label_info.get("summary")
+    questions = follow_up_questions(score, "text")
 
     response = [
-        "Text diagnosis (rule-based):",
-        format_prediction(label, score),
+        f"Likely diagnosis: {label_info.get('display_name')}",
+        f"Confidence: {confidence_band(score)} ({score * 100:.1f}%)",
+        f"Confidence bar: {confidence_bar(score)}",
     ]
+    if label_info.get("crop"):
+        response.append(f"Crop: {label_info.get('crop')}")
+    if label_info.get("disease") and label_info.get("disease") != "Unknown":
+        response.append(f"Issue: {label_info.get('disease')}")
+    if summary:
+        response.append(f"Summary: {summary}")
+    response.append("Treatment guidance:")
     response.extend(format_treatment_lines(tips))
+    if questions:
+        response.append("Follow-up questions:")
+        for question in questions:
+            response.append(f"- {question}")
 
     report = {
         "timestamp": datetime.now().isoformat(timespec="seconds"),
@@ -438,6 +589,10 @@ if prompt:
         "input_text": prompt,
         "prediction": {"label": label, "confidence": score},
         "treatment": tips,
+        "summary": summary,
+        "confidence_band": confidence_band(score),
+        "follow_up_questions": questions,
+        "label_info": label_info,
         "notes": "Rule-based text model (BERT integration pending).",
     }
     st.session_state.last_report = report

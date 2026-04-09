@@ -120,6 +120,62 @@ def predict_image(model, class_names, image: Image.Image, top_k: int = 3):
     return results
 
 
+def _split_label(label: str):
+    if "___" in label:
+        crop, disease = label.split("___", 1)
+        return crop, disease
+    if "_" in label:
+        crop, disease = label.split("_", 1)
+        return crop, disease
+    return label, ""
+
+
+def pretty_label(label: str):
+    crop, disease = _split_label(label)
+    crop = crop.replace("_", " ").strip()
+    disease = disease.replace("_", " ").strip()
+    if disease:
+        return f"{crop} - {disease}"
+    return crop
+
+
+def confidence_band(score: float):
+    if score >= 0.75:
+        return "High"
+    if score >= 0.5:
+        return "Medium"
+    if score >= 0.25:
+        return "Low"
+    return "Very low"
+
+
+def build_summary(label: str, tips):
+    label_l = label.lower()
+    if "healthy" in label_l:
+        return "No visible disease symptoms detected in the input."
+    if isinstance(tips, dict):
+        notes = tips.get("notes")
+        if isinstance(notes, list) and notes:
+            return notes[0]
+    return "Symptoms appear consistent with the predicted disease."
+
+
+def follow_up_questions(score: float, input_type: str):
+    if score >= 0.5:
+        return []
+    if input_type == "image":
+        return [
+            "Can you upload a clearer, closer photo of the affected leaf?",
+            "Which crop is this plant?",
+            "Do you see spots, mold, or yellowing on the leaves?",
+        ]
+    return [
+        "Which crop is affected?",
+        "Are there spots, mold, or yellowing on the leaves?",
+        "Can you upload a leaf photo for a more accurate result?",
+    ]
+
+
 def _detect_crop(text: str, class_names):
     crops = sorted({name.split("_")[0].lower() for name in class_names})
     for crop in crops:
@@ -194,6 +250,43 @@ def recommend_treatment(label: str):
     return []
 
 
+@lru_cache(maxsize=1)
+def load_label_map():
+    path = DATA_DIR / "label_map.json"
+    if path.exists():
+        data = _safe_read_json(path)
+        if isinstance(data, dict):
+            labels = data.get("labels")
+            if isinstance(labels, dict):
+                return labels
+    return {}
+
+
+def _clean_label_text(text: str):
+    return text.replace("_", " ").strip()
+
+
+def get_label_info(label: str, tips, label_map: dict):
+    info = label_map.get(label, {}) if isinstance(label_map, dict) else {}
+    crop_raw, disease_raw = _split_label(label)
+    crop = _clean_label_text(crop_raw)
+    disease = _clean_label_text(disease_raw)
+    if not disease and "healthy" in label.lower():
+        disease = "Healthy"
+    display_name = info.get("display_name") or pretty_label(label)
+    if display_name.lower().endswith(" - healthy"):
+        display_name = display_name[:-9] + "Healthy"
+    if disease.lower() == "healthy":
+        disease = "Healthy"
+    summary = info.get("summary") or build_summary(label, tips)
+    return {
+        "display_name": display_name,
+        "crop": info.get("crop") or crop,
+        "disease": info.get("disease") or disease or "Unknown",
+        "summary": summary,
+    }
+
+
 def resolve_model_key(value: str | None):
     if not value:
         return DEFAULT_MODEL_KEY
@@ -262,6 +355,10 @@ def predict_image_endpoint():
     preds = predict_image(model, class_names, image, top_k=top_k)
     primary = preds[0] if preds else {"label": "Unknown", "confidence": 0.0}
     treatment = recommend_treatment(primary["label"])
+    label_map = load_label_map()
+    label_info = get_label_info(primary["label"], treatment, label_map)
+    summary = label_info.get("summary")
+    questions = follow_up_questions(primary["confidence"], "image")
 
     return jsonify(
         {
@@ -271,6 +368,11 @@ def predict_image_endpoint():
             "prediction": primary,
             "top_k": preds,
             "treatment": treatment,
+            "summary": summary,
+            "confidence_band": confidence_band(primary["confidence"]),
+            "display_label": label_info.get("display_name"),
+            "follow_up_questions": questions,
+            "label_info": label_info,
         }
     )
 
@@ -292,6 +394,10 @@ def predict_text_endpoint():
 
     label, score = rule_based_text_diagnosis(text, class_names)
     treatment = recommend_treatment(label)
+    label_map = load_label_map()
+    label_info = get_label_info(label, treatment, label_map)
+    summary = label_info.get("summary")
+    questions = follow_up_questions(score, "text")
 
     return jsonify(
         {
@@ -299,6 +405,11 @@ def predict_text_endpoint():
             "class_source": source,
             "prediction": {"label": label, "confidence": score},
             "treatment": treatment,
+            "summary": summary,
+            "confidence_band": confidence_band(score),
+            "display_label": label_info.get("display_name"),
+            "follow_up_questions": questions,
+            "label_info": label_info,
             "notes": "Rule-based text model (BERT integration pending).",
         }
     )
