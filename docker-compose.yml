@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  streamlit:
+    build: .
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+    restart: unless-stopped
+
+  flask-api:
+    build: .
+    command: python backend/server.py
+    ports:
+      - "5001:5001"
+    env_file:
+      - .env
+    environment:
+      - FLASK_HOST=0.0.0.0
+      - FLASK_PORT=5001
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+    restart: unless-stopped

@@ -1,7 +1,16 @@
+import csv
 import json
+import os
 from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
+
+# Load .env from project root
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+except ImportError:
+    pass
 
 import torch
 import torch.nn.functional as F
@@ -13,6 +22,8 @@ from torchvision import models, transforms
 ROOT = Path(__file__).resolve().parents[1]
 MODELS_DIR = ROOT / "models"
 DATA_DIR = ROOT / "data"
+TEXT_MODEL_DIR = MODELS_DIR / "bert_symptom_classifier"
+TEXT_LABELS_PATH = TEXT_MODEL_DIR / "labels.json"
 
 
 MODEL_FILES = {
@@ -33,6 +44,7 @@ def _safe_read_json(path: Path):
 def load_class_names(expected_count: int):
     json_path = DATA_DIR / "class_names.json"
     txt_path = DATA_DIR / "class_names.txt"
+    train_dir = DATA_DIR / "train"
     data_cleaned_dir = DATA_DIR / "data_cleaned"
 
     if json_path.exists():
@@ -44,6 +56,11 @@ def load_class_names(expected_count: int):
         names = [line.strip() for line in txt_path.read_text(encoding="utf-8").splitlines() if line.strip()]
         if len(names) == expected_count:
             return names, "data/class_names.txt"
+
+    if train_dir.exists():
+        names = sorted([p.name for p in train_dir.iterdir() if p.is_dir()])
+        if len(names) == expected_count:
+            return names, "data/train/*"
 
     if data_cleaned_dir.exists():
         names = sorted([p.name for p in data_cleaned_dir.iterdir() if p.is_dir()])
@@ -103,6 +120,101 @@ IMAGE_TRANSFORM = transforms.Compose(
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ]
 )
+
+
+def _find_column(fieldnames, candidates):
+    if not fieldnames:
+        return None
+    for name in fieldnames:
+        if not name:
+            continue
+        if name.strip().lower() in candidates:
+            return name
+    return None
+
+
+def _load_labels_from_csv(csv_path: Path):
+    if not csv_path.exists():
+        return []
+    with csv_path.open("r", newline="", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        label_col = _find_column(reader.fieldnames, {"label", "label (class)", "class"})
+        if not label_col:
+            return []
+        labels = set()
+        for row in reader:
+            raw = row.get(label_col)
+            if raw:
+                labels.add(raw.strip())
+        return sorted(labels)
+
+
+def _labels_from_config(model):
+    id2label = getattr(model.config, "id2label", None)
+    if not isinstance(id2label, dict) or not id2label:
+        return []
+    try:
+        pairs = sorted(((int(k), v) for k, v in id2label.items()), key=lambda x: x[0])
+        return [label for _idx, label in pairs]
+    except Exception:
+        return []
+
+
+def _labels_from_file(path: Path):
+    if not path.exists():
+        return []
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    if isinstance(raw, list):
+        return [item for item in raw if isinstance(item, str) and item]
+    if isinstance(raw, dict):
+        labels = raw.get("labels")
+        if isinstance(labels, list):
+            return [item for item in labels if isinstance(item, str) and item]
+    return []
+
+
+@lru_cache(maxsize=1)
+def load_text_model():
+    if not TEXT_MODEL_DIR.exists():
+        return None, None, [], "Rule-based (BERT model not found)"
+    try:
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+    except Exception as exc:
+        return None, None, [], f"Rule-based (transformers unavailable: {exc})"
+
+    try:
+        model = AutoModelForSequenceClassification.from_pretrained(TEXT_MODEL_DIR)
+        tokenizer = AutoTokenizer.from_pretrained(TEXT_MODEL_DIR)
+    except Exception as exc:
+        return None, None, [], f"Rule-based (BERT load failed: {exc})"
+
+    model.eval()
+    labels = _labels_from_config(model)
+    if not labels:
+        labels = _labels_from_file(TEXT_LABELS_PATH)
+    if not labels:
+        labels = _load_labels_from_csv(DATA_DIR / "symptom.csv")
+    return model, tokenizer, labels, "BERT (models/bert_symptom_classifier)"
+
+
+def predict_text_bert(text: str, model, tokenizer, labels):
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, padding=True)
+    with torch.no_grad():
+        outputs = model(**inputs)
+        logits = outputs.logits
+    probs = torch.softmax(logits, dim=1).squeeze(0)
+    pred_id = int(torch.argmax(probs).item())
+    confidence = float(probs[pred_id].item())
+    label = None
+    if labels and pred_id < len(labels):
+        label = labels[pred_id]
+    if not label:
+        id2label = getattr(model.config, "id2label", {})
+        label = id2label.get(pred_id, "Unknown")
+    return label, confidence
 
 
 def predict_image(model, class_names, image: Image.Image, top_k: int = 3):
@@ -322,7 +434,16 @@ app = Flask(__name__)
 @app.get("/health")
 def health():
     available = [name for name, file in MODEL_FILES.items() if (MODELS_DIR / file).exists()]
-    return jsonify({"status": "ok", "models": available})
+    text_models = ["bert"] if TEXT_MODEL_DIR.exists() else []
+    text_status = "bert_available" if text_models else "bert_missing"
+    return jsonify(
+        {
+            "status": "ok",
+            "models": available,
+            "text_models": text_models,
+            "text_model_status": text_status,
+        }
+    )
 
 
 @app.get("/models")
@@ -353,7 +474,9 @@ def predict_image_endpoint():
 
     model, class_names, source, filename = bundle
     preds = predict_image(model, class_names, image, top_k=top_k)
-    primary = preds[0] if preds else {"label": "Unknown", "confidence": 0.0}
+    # predict_image returns list of (label, score) tuples
+    preds_list = [{"label": lbl, "confidence": sc} for lbl, sc in preds]
+    primary = preds_list[0] if preds_list else {"label": "Unknown", "confidence": 0.0}
     treatment = recommend_treatment(primary["label"])
     label_map = load_label_map()
     label_info = get_label_info(primary["label"], treatment, label_map)
@@ -366,7 +489,7 @@ def predict_image_endpoint():
             "weights": filename,
             "class_source": source,
             "prediction": primary,
-            "top_k": preds,
+            "top_k": preds_list,
             "treatment": treatment,
             "summary": summary,
             "confidence_band": confidence_band(primary["confidence"]),
@@ -392,7 +515,14 @@ def predict_text_endpoint():
         if bundle:
             _model, class_names, source, _filename = bundle
 
-    label, score = rule_based_text_diagnosis(text, class_names)
+    text_model, text_tokenizer, text_labels, text_status = load_text_model()
+    use_bert = text_model is not None and text_tokenizer is not None
+    if use_bert:
+        label, score = predict_text_bert(text, text_model, text_tokenizer, text_labels)
+        notes = "BERT text model"
+    else:
+        label, score = rule_based_text_diagnosis(text, class_names)
+        notes = "Rule-based text model (BERT not available)."
     treatment = recommend_treatment(label)
     label_map = load_label_map()
     label_info = get_label_info(label, treatment, label_map)
@@ -410,10 +540,15 @@ def predict_text_endpoint():
             "display_label": label_info.get("display_name"),
             "follow_up_questions": questions,
             "label_info": label_info,
-            "notes": "Rule-based text model (BERT integration pending).",
+            "notes": notes,
+            "text_model": "bert" if use_bert else "rule_based",
+            "text_model_status": text_status,
         }
     )
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    host = os.getenv("FLASK_HOST", "127.0.0.1")
+    port = int(os.getenv("FLASK_PORT", "5001"))
+    debug = os.getenv("FLASK_DEBUG", "false").lower() == "true"
+    app.run(host=host, port=port, debug=debug)
