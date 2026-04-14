@@ -1,34 +1,68 @@
-# Python caches
+# ── Python ────────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyc
+*.pyd
 
-# Environments
+# ── Virtual environments ───────────────────────────────────────────────────────
 .env
 .env.*
+!.env.example
 .venv/
 venv/
+env/
 
-# Jupyter
+# ── Jupyter ────────────────────────────────────────────────────────────────────
 .ipynb_checkpoints/
+notebooks/__pycache__/
 
-# Data folders kept in Drive (not tracked in git)
-data/
-!data/
-data/*
+# ── Data (large image datasets — keep only metadata/CSVs) ─────────────────────
+data/train/
+data/test/
+data/val/
+data/data_cleaned/
+data/unused_data/
+data/*.zip
+data/*.tar
+data/*.tar.gz
+
+# Keep these data files tracked
 !data/class_names.txt
+!data/class_names.json
 !data/treatments.json
-data_cleaned/
+!data/label_map.json
+!data/symptom.csv
+!data/train_symptoms.csv
+!data/test_symptoms.csv
+
+# ── Raw dataset folders ────────────────────────────────────────────────────────
 PlantVillage/
 unused_data/
-val/
-models/
 
-# Logs & runs
-logs/
+# ── Trained model weights (large binaries) ────────────────────────────────────
+models/*.pth
+models/*.pt
+models/bert_symptom_classifier/
+
+# ── BERT training checkpoints ─────────────────────────────────────────────────
+results/
+
+# ── Logs ───────────────────────────────────────────────────────────────────────
 *.log
+logs/
 runs/
 
-# OS/editor noise
+# ── Scripts (internal utilities, not needed on GitHub) ────────────────────────
+scripts/
+
+# ── Misc / scratch ─────────────────────────────────────────────────────────────
+payload.json
+*.swp
+*.swo
+
+# ── OS / editor ────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+.idea/
+.vscode/
